@@ -1,0 +1,11 @@
+module sbox(in, s, ck);
+input [3:0] in;
+output [3:0] s;
+input ck;
+
+reg [3:0] s;
+
+always @(posedge ck) begin
+end
+
+endmodule

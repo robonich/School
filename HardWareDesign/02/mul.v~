@@ -1,0 +1,28 @@
+module mul(A, B, O, ck, start, fin);
+   input [7:0] A, B;
+   output [16:0] O;
+   input 	 ck, start;
+   output 	 fin;
+   reg [7:0] 	 AIN, BIN;
+   reg [16:0] 	 OR;
+   
+   always @(posedge ck) begin
+      AIN <= A;
+      BIN <= B;
+      if(start == 1) begin
+	 O <= 0;
+      end else begin
+	 if(st < 7) begin
+	    O <= (OR<<1) + AIN * BIN[7-st];
+	    fin <= 0;
+	 end else if(st == 7) begin
+	    O <= (OR<<1) + AIN * BIN[0];
+	    fin <= 1;
+	 end else if(st == 8) begin
+	    fin <= 0;
+	 end
+      end // else: !if(start == 1)
+   end // always @ (posedge ck)
+   
+      
+		       
