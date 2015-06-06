@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define LONGEST 615//1000000
+#define LONGEST 1000000
 
 int main(void){
     char data[LONGEST];
@@ -22,26 +22,16 @@ int main(void){
     
     while(flag == 0){
         for(j = 0; j < syukai; j++){
-            char *longest_string;
-            longest_string = (char *)malloc(sizeof(char)*LONGEST);
             for(i = 0; i < LONGEST - syukai; i++){
-                *(longest_string+i) = data[j+i];
-            }
-            *(longest_string+i) = '\0';
-            //printf("%s\n", longest_string);
-            for(k = j+1; k < syukai+1; k++){
-                l = 0;
-                while(*(longest_string+l) != '\0'){
-                    if(*(longest_string+l) != data[k+l]) break;
-                    else l++;
-                }
-                if(*(longest_string+l) == '\0'){
-                    flag = 1;
+                if(data[i] != data[j+i]){
                     break;
-                } 
+                }
+                else{
+                    int j1 = j, i1 = i;
+                    for(i = 0; i < i1; i++)
+                    printf("%d")
+                }
             }
-            if(flag == 1){printf("the longest string is %s\n", longest_string); break;}
-            free(longest_string);
         }
         syukai++;
     }
