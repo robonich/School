@@ -49,6 +49,8 @@ int main(void){
   }
   data[0][LONGEST] = '\0';
 
+  char *a = data[0];
+
   for(i = 0; i < LONGEST; i++) data[i] = data[0] + i;
 
   Qsort2(data, 0, LONGEST - 1);
@@ -74,6 +76,7 @@ int main(void){
   } 
   printf("\n");
    
+  free(a);
   fclose(fp);
   return 0;
 }
