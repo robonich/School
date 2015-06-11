@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Language" content="ja" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<meta http-equiv="imagetoolbar" content="no" />
+	<title>進学を志すみなさんへ - 学科での生活 - 年間スケジュール - 東京大学工学部　電子情報工学科・電気電子工学科</title>
+	<link rel="contents" href="../../j" />
+	<link rel="stylesheet" href="../css/j.css" type="text/css" media="all" />
+	<script type="text/JavaScript" src="../js/AC_RunActiveContent.js"></script>
+</head>
+<body class="education">
+	<div class="header">
+		<h1><a href="../index.php"><img src="../share/img/header_logo.gif" alt="東京大学工学部 - 電子情報工学科・電気電子工学科" width="385" height="35" /></a></h1>
+		<ul class="header-menu">
+			<li class="header-btn-toppage"><a href="../index.php"><span>トップページ</span></a></li>
+			<li class="header-btn-sitemap"><a href="../sitemap.html"><span>サイトマップ</span></a></li>
+			<li class="header-btn-students"><a href="../students/index.html"><span>内部生のページ</span></a></li>
+			<!--<li class="header-btn-eng"><a href="../../e/index.html"><span>English</span></a></li>-->
+		</ul>
+		<div id="gnav">
+		<div id="keyvisual"><img src="../share/img/keyvisual01.jpg" width="800" height="37" alt="" /></div>
+		<ul id="menu">
+			<li class="gnav-education"><a href="../index.php" class="here"><span>進学を志すみなさんへ</span></a></li>
+			<li class="gnav-news"><a href="http://www.ee.t.u-tokyo.ac.jp/j/news"><span>ニュース</span></a></li>
+			<li class="gnav-research"><a href="../research/index.html"><span>研究</span></a></li>
+			<li class="gnav-staff"><a href="../staff/index.html"><span>教員</span></a></li>
+			<li class="gnav-access"><a href="../access.html"><span>アクセス</span></a></li>	
+		</ul>
+		</div>
+	</div>
+	<div class="root">
+		<div class="breadcrumbs"><a href="../index.php">Top</a> &gt; 学科での生活</div>
+		
+	<div class="sub">
+		<div id="localmenu-g">
+		<p class="title"><img src="img/sidemenu_title02.gif" width="190" height="50" alt="学科での生活" /></p>		
+			<ul>
+				<li><a href="life.html" class="here">年間スケジュール</a></li>
+				<li><a href="facilities.html">施設・設備</a></li>				
+				<li><a href="voice.html">現役学生の声</a></li>
+				<li><a href="voice_graduate.html">卒業生の声</a></li>
+				<li><a href="alumni.html">同窓会のあるきかた</a></li>
+			</ul>
+		</div>	
+		<div id="sidebanner">
+			<ul>
+				<li><a href="../education/guidance_book_2015.pdf" target="_blank"><img src="../share/img/banner_guidancebook.gif" width="190" height="260" alt="進学ガイダンスブック" /></a></li>
+				<li><a href="../document.html"><img src="../share/img/banner_document.gif" width="190" height="80" alt="発行物" /></a></li>
+				<li><a href="../link.html"><img src="../share/img/banner_link.gif" width="190" height="80" alt="関連の大学院・研究所" /></a></li>
+				<li><a href="../banner/alumni.html"><img src="../share/img/banner_meeting.gif" width="190" height="80" alt="同窓会のあるきかた" /></a></li>
+				<li><a href="http://www.ee.t.u-tokyo.ac.jp/~eejim/jim.html" target="_blank"><img src="../share/img/banner_office.gif" width="190" height="80" alt="電気系事務室" /></a></li>	
+			</ul>
+		</div>
+		<div id="sns">
+		<p class="title">＋&nbsp;&nbsp;Follow Us</p>
+			<ul>
+				<li><a href="http://www.facebook.com/pages/EEIC%E6%9D%B1%E4%BA%AC%E5%A4%A7%E5%AD%A6/288681391148337?sk=app_264251026939665" target="_blank"><img src="../share/img/side_icon_facebook.gif">facebook</a></li>
+				<li><a href="http://twitter.com/#!/EEIC_Univ_Tokyo" target="_blank"><img src="../share/img/side_icon_twitter.gif">Twitter</a></li>				
+			</ul>
+		</div>
+		<div id="submenu">
+			<ul>				
+				<li><a href="../about.html">＋&nbsp;&nbsp;このサイトについて</a></li>			
+			</ul>
+		</div>								
+	</div>
+
+		<div class="main">
+			<h2><img src="img/life_h2_01.gif" alt="学科での生活" width="590" height="53" /></h2>
+			<p>多彩な分野の学問や多彩な仲間が集まる教養学部とは打って変わって、一つの場所に軸足を置いて探究を進める学科では、同じ志を持つ教員・仲間との深く濃い交流が生まれます。卒業や進学などの展望も開け、企業や研究所の最前線に触れるチャンスも。学部上級生として新人研究者として、ますます自発性が問われるでしょう。アクティブで実り多い毎日が待っています。</p>
+			<hr class="clear" />
+			<div><a href="img/life_pic02_l.jpg" target="_blank"><img src="img/life_pic02.jpg" alt="スケジュール" width="590" height="195" /></a></div>
+			<h3><img src="img/life_h3_01.gif" alt="専門科目講義開始" width="590" height="38" /></h3>
+			<p><img src="img/life_pic03.jpg" alt="講義" width="240" height="160" style="float:right;margin:0 0 10px 10px" />専門というと難しく感じますが、実際は分野の基礎からスタート。重点科目を丁寧に学んでいきます。この道の先輩でもある教員陣は、これまで以上に身近な存在に。また、共通する興味関心を持った仲間も集まってきます。</p>
+
+			<h3><img src="img/life_h3_02.gif" alt="本郷進学" width="590" height="38" /></h3>
+			<p>安田講堂隣に立つ真新しい工学部2 号館、ここが皆さんの学びの拠点です。学生控室にロッカーを持ち、腰を据えて授業に取り組めるはず。本郷キャンパスは駒場キャンパスに比べて落ち着いていて研究に適した雰囲気で、気持ちも新たにこれからの研究生活の礎となる知識を身につけます。</p>
+
+			<h3><img src="img/life_h3_03.gif" alt="学生実験・演習" width="590" height="38" /></h3>
+			<div><img src="img/life_pic04.jpg" alt="実験" width="190" height="127" /><img src="img/life_pic05.jpg" alt="実験" width="190" height="127" style="margin:0 10px" /><img src="img/life_pic06.jpg" alt="実験" width="190" height="127" /></div>
+			<p>3 年生で特に大きなウェイトを占めるのが実験や演習。実際に手を動かすことで知識が身についていきます。時には夜までかかることもありますが、それは友達同士のつながりを深めたり、担当の先生方と交流を深めるチャンスでもあります。</p>
+
+			<h3><img src="img/life_h3_04.gif" alt="五月祭" width="590" height="38" /></h3>
+			<p>3 年生が中心となって学科展示を行います。興味を持った研究室に入門し、4 年生や大学院生の助けを借りながらグループで展示を準備します。五月祭当日、展示の説明を行うのも3 年生の役目。電気・情報系の魅力をどう伝えるか、皆さんの腕にかかっています。</p>
+			<p>近年は学生主体で3つの講演会を企画したほか、11の技術展示を行い、工学部2号館だけで約10,000名の来場者がありました。	</p>
+			<p><a href="http://eeic.jp/" target="_new">2011年五月祭ウェブサイト http://eeic.jp/</a></p>
+			<h3><img src="img/life_h3_05.gif" alt="コンタクトグループ" width="590" height="38" /></h3>
+			<p>3 ～ 4 名の学生と1 ～ 2 名の教員で組むコンタクトグループでは、授業を超えて密度の濃い交流がはかれます。時にはプライベートで食事やお酒を交えて、人生の夢や日頃の思いを共に語り合ってみては。</p>
+
+			<h3><img src="img/life_h3_06.gif" alt="企業見学・見学旅行" width="590" height="38" /></h3>
+			<p>夏学期・冬学期とも水曜の午後を使って企業見学やJAXA の研究所をはじめとした研究現場見学を行います。企業の研究開発現場を見学できるのは学生の特権です。さらに夏・冬休みにはダムや関西地区の企業などへの見学旅行も行います。</p>
+
+			<h3><img src="img/life_h3_07.gif" alt="卒業研究" width="590" height="38" /></h3>
+			<p>4 年生になると研究室に所属し、研究者への第一歩を踏み出します。これまで学んだことを活かし、前人未踏の課題に挑戦しましょう。ここからは日常生活の舞台も研究室。経験豊かな大学院の先輩も支えに、卒業まで日々成長していく自分を実感してください。</p>
+
+			<h3><img src="img/life_h3_08.gif" alt="懇和会" width="590" height="38" /></h3>
+			<p>懇和会は、4 年生以上の学生・卒業生や教員がラボの枠を超えて親睦を深める組織。春・秋のスポーツ大会では、普段厳しく指導している先生や先輩の意外な一面が見られるかもしれません。夏にはビアパーティー、冬には新年会で盛り上がります。</p>
+
+			<h3><img src="img/life_h3_09.gif" alt="卒業論文発表会" width="590" height="38" /></h3>
+			<p>研究室での1 年の成果をまとめ、教員陣や同期生の前で発表します。先生方の厳しい質問をクリアすれば、晴れて卒業! 大きな成果が得られれば、国内外の学会でも発表を行います。</p>
+		</div>
+		<div class="footer">
+			<div class="footer-copy"><span>Copyright &copy; Department of Information and Communication Engineering Department of Electrical and Electronic Engineering The University of Tokyo. All rights reserved. </span></div>
+		</div>
+	</div>
+</body>
+</html>

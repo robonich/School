@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define N 100
+
+int main(int argc, char **argv){
+  int fd = open(argv[1], O_RDONLY);
+  if(fd == -1){perror("open"); exit(1);}
+  
+
+  int all_bytes = 0;
+  unsigned char data[N];
+  while(1){
+    int n, i;
+    n = read(fd, data, N);
+    if(n == -1){perror("read"); exit(1);}
+    if(n == 0) break;
+    for(i = 0; i < n; i++, all_bytes++){ 
+      printf("%d %d\n", all_bytes, data[i]);
+    }
+  }
+  
+  close(fd);
+  return 0;
+}
