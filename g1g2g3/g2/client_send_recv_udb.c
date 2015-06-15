@@ -9,10 +9,10 @@
 #include <arpa/inet.h>
 
 
-#define N 100
+#define N 1000
 
 int main(int argc, char *argv[]){
-  int s = socket(PF_INET, SOCK_STREAM, 0);//UDPならSOCK_DGRAM
+  int s = socket(PF_INET, SOCK_DGRAM, 0);//UDPならSOCK_DGRAM
   if(s == -1){perror("socket"); exit(1);}
 
   char *ip = argv[1];
@@ -27,20 +27,35 @@ int main(int argc, char *argv[]){
   int ret = connect(s, (struct sockaddr *)&addr, sizeof(addr)); /* 遂に connect */
   if(ret == -1){perror("connect"); exit(1);}
 
-  unsigned char data[N];
+  char data[N];
   
   while(1){
-    int n_recv = recv(s, data, N, 0);//recvfromとかもあるよ
-    if(n_recv == -1){perror("n_recv"); exit(1);};
-    if(n_recv == 0) break;
-    
-    int n_send = write(1, data, N);//sendtoとかもあるよ
+    /*  int n_read = read(0, data, N);//recvfromとかもあるよ
+    if(n_read == -1){perror("n_read"); exit(1);};
+    if(n_read == 0) break;
+    */
+    int n_send = send(s, data, N, 0);//sendtoとかもあるよ
     if(n_send == -1){perror("n_send"); exit(1);}
     if(n_send == 0) break;
-    
   }
   
   shutdown(s, SHUT_WR);
-  
+
+  unsigned char data2[N];
+  int i;
+  int flag = 1;
+
+  while(1){
+    int n_recv = recv(s, data2, N, 0);
+    if(n_recv == -1){perror("n_recv"); exit(1);};
+    if(n_recv == 0) break;
+    for(i = 0; i < 1000; i++){
+      flag = flag && (data2[i] == 1);
+    }
+    if (flag == 1) break;
+    int n_write = write(1, data2, N);
+    if(n_write == -1){perror("n_write"); exit(1);};
+    if(n_write == 0) break;
+  }
   return 0;
 }
