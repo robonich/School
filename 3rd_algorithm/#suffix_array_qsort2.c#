@@ -28,7 +28,6 @@ typedef struct answer{
 }Answer;
 
 void Qsort2(long longest, char *data[longest], long, long);
-
 /*int stringcmp(char *, char *);
 
 int stringcmp(char *a, char *b){//suffixが等しくなることはないので等しい場合は考えない
