@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <netinet/in.h>
+#include <netinet/ip.h>
+#include <netinet/tcp.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <time.h>
+
+
+#define N 1000
+
+int timer(time_t t1, time_t t2){
+  struct tm *t_st1, *t_st2;
+
+   t_st1 = localtime(&t1);
+   t_st2 = localtime(&t2);
+
+   return (t_st2->tm_hour-t_st1->tm_hour)*3600 +
+     ((t_st2->tm_min-t_st1->tm_min >= 0) ? (t_st2->tm_min-t_st1->tm_min)*60 : (60 + t_st2->tm_min-t_st1->tm_min)*60)  +
+     ((t_st2->tm_sec-t_st1->tm_sec >= 0) ? t_st2->tm_sec-t_st1->tm_sec : 60 + t_st2->tm_sec-t_st1->tm_sec); 
+}
+
+int main(int argc, char *argv[]){
+  time_t t1;
+  
+  time(&t1);
+
+  int s = socket(PF_INET, SOCK_STREAM, 0);//UDPならSOCK_DGRAM
+  if(s == -1){perror("socket"); exit(1);}
+
+  char *port = argv[1];
+
+  struct sockaddr_in addr;
+ 
+  addr.sin_family = AF_INET; /* これは IPv4 のアドレスです */
+  addr.sin_port = htons(atoi(port)); /* ポートは ... です */
+  addr.sin_addr.s_addr = INADDR_ANY; /*どのIPアドレスでも待ち受けしたいです*/
+  bind(s, (struct sockaddr *)&addr, sizeof(addr));
+  int l = listen(s, 10);
+  
+  struct sockaddr_in client_addr;
+  socklen_t len = sizeof(struct sockaddr_in);
+  int ss = -1;
+  printf("t1\n");
+  ss = accept(s, (struct sockaddr *)&client_addr, &len);
+  if(ss == -1){perror("accept"); exit(1);}
+  printf("t2\n");
+  unsigned char data2[N];
+
+  time_t t2;
+  time(&t2);
+  int timers = difftime(t2, t1);
+  printf("%d\n", timers);
+  int bytes = timers*44100*2;
+ 
+  while(bytes > 0){
+    int n_read2 = read(0, data2, N);
+    if(n_read2 == -1) {perror("n_read2"); exit(1);}
+    bytes -= N;
+  }
+  
+
+  while(1){
+    int n_read = read(0, data2, N);
+    if(n_read == -1) {perror("n_read"); exit(1);}
+    if(n_read == 0) break;
+    int n_send = sendto(ss, data2, n_read, 0, (const struct sockaddr *)&client_addr, sizeof(client_addr));//ss
+    if(n_send == -1) {perror("n_send"); exit(1);}
+    if(n_send == 0) break;
+
+    
+    
+  }
+
+  shutdown(s, SHUT_WR);
+
+  return 0;
+}
