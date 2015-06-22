@@ -9,10 +9,28 @@
 #include <arpa/inet.h>
 #include <time.h>
 
-
 #define N 1000
 
+void die(char *);
+ssize_t read_n(int, ssize_t, void *);
+ssize_t write_n(int, ssize_t, void *);
+void sample_to_complex(sample_t *, complex double *, long);
+void complex_to_sample(complex double *, sample_t *, long);
+void fft_r(complex double *, complex double *, long, complex double);
+void fft(complex double *, complex double *, long);
+void ifft(complex double *, complex double *, long);
+int pow2check(long);
+
+
+
 int main(int argc, char *argv[]){
+
+  long n = 1024;//2のn乗であればよい
+  int low_f, high_f;
+  sample_t * buf = calloc(sizeof(sample_t), n);
+  complex double * X = calloc(sizeof(complex double), n);
+  complex double * Y = calloc(sizeof(complex double), n);
+  int b = 0;
 
   int s, ss;
   struct sockaddr_in serv_addr, client_addr;
@@ -20,6 +38,8 @@ int main(int argc, char *argv[]){
   if(argc == 2){
     time_t t1;  
     time(&t1);
+
+    low_f = argv[3]; high_f = argv[4];
     
     ss = socket(PF_INET, SOCK_STREAM, 0);//UDPならSOCK_DGRAM
     if(ss == -1){perror("socket"); exit(1);}
@@ -75,6 +95,21 @@ int main(int argc, char *argv[]){
     int n_read = read(0, data, N);
     if(n_read == -1) {perror("n_read"); exit(1);}
     if(n_read == 0) break;
+        
+    //フーリエ変換始まり
+    ssize_t m = read_n(0, n * sizeof(sample_t), buf);
+    if (m == 0) break;
+    sample_to_complex(buf, X, n);
+    fft(X, Y, n);
+    for(b = 0; b < n; b++){
+      if(b < low_f/((double)44100/n) || b > high_f/((double)44100/n)){
+	Y[b] = 0 + 1.0j * 0;
+      }
+    }
+    ifft(Y, X, n);
+    complex_to_sample(X, buf, n);
+    //フーリエ変換終わり
+
     int n_send = sendto(s, data, n_read, 0, (const struct sockaddr *)&client_addr, sizeof(client_addr));//s
     if(n_send == -1) {perror("n_send"); exit(1);}
     if(n_send == 0) break;

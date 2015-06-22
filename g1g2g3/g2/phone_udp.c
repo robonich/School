@@ -31,12 +31,12 @@ int main(int argc, char *argv[]){
     serv_addr.sin_port = htons(atoi(port)); /* ポートは ... です */
     serv_addr.sin_addr.s_addr = INADDR_ANY; /*どのIPアドレスでも待ち受けしたいです*/
     bind(ss, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
-      int l = listen(ss, 10);
+    //int l = listen(ss, 10);
     
-       socklen_t client_addr_len = sizeof(client_addr);
-      
-    s = accept(ss, (struct sockaddr *)&client_addr, &client_addr_len);
-    if(s == -1){perror("accept"); exit(1);}
+    // socklen_t client_addr_len = sizeof(client_addr);
+    
+    //s = accept(ss, (struct sockaddr *)&client_addr, &client_addr_len);
+    //if(s == -1){perror("accept"); exit(1);}
     
     unsigned char data2[N];
 
@@ -48,6 +48,7 @@ int main(int argc, char *argv[]){
     while(bytes > 0){
       int n_read2 = read(0, data2, N);
       if(n_read2 == -1) {perror("n_read2"); exit(1);}
+      if(n_read2 == 0) break;
       bytes -= N;
     }
   }
@@ -67,27 +68,31 @@ int main(int argc, char *argv[]){
   
   unsigned char data[N];
     
-    struct sockaddr_in from_addr;
-    socklen_t from_addr_len = sizeof(from_addr);
+  struct sockaddr_in from_addr;
+  socklen_t from_addr_len;
 
   while(1){
-    int n_read = read(0, data, N);
-    if(n_read == -1) {perror("n_read"); exit(1);}
-    if(n_read == 0) break;
-      //(struct sockaddr *)&to, sizeof(to)
-      int n_send = sendto(s, data, n_read, 0, (argc==2) ? (struct sockaddr *)&serv_addr : (const struct sockaddr *)&client_addr, (argc==2) ? sizeof(serv_addr) : sizeof(client_addr));//s
-    if(n_send == -1) {perror("n_send"); exit(1);}
-    if(n_send == 0) break;
 
-    int n_recv = recvfrom(s, data, N, 0, (struct sockaddr *)&from_addr, &from_addr_len);//recvfromとかもあるよ
+    int n_recv = recvfrom((argc==2) ? ss : s , data, N, 0, (struct sockaddr *)&from_addr, &from_addr_len);//recvfromとかもあるよ
     if(n_recv == -1){perror("n_recv"); exit(1);};
     if(n_recv == 0) break;
     
     int n_write = write(1, data, n_recv);//sendtoとかもあるよ
     if(n_write == -1){perror("n_send"); exit(1);}
     if(n_write == 0) break;
-  }
 
+    from_addr_len = sizeof(from_addr);
+    int n_read = read(0, data, N);
+    if(n_read == -1) {perror("n_read"); exit(1);}
+    if(n_read == 0) break;
+    //(struct sockaddr *)&to, sizeof(to)
+    int n_send = sendto((argc==2) ? ss : s, data, n_read, 0, (const struct sockaddr *)&from_addr/*(argc==2) ? (const struct sockaddr *)&serv_addr : (const struct sockaddr *)&client_addr*/, sizeof(from_addr)/*(argc==2) ? sizeof(serv_addr) : sizeof(client_addr)*/);//s
+    if(n_send == -1) {perror("n_send"); exit(1);}
+    if(n_send == 0) break;
+    
+    
+  }
+  
   if(argc == 2) shutdown(ss, SHUT_WR);
   else if(argc == 3) shutdown(s, SHUT_WR);
 
