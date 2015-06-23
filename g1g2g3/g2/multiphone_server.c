@@ -46,7 +46,6 @@ int main(int argc, char *argv[]){
     time_t t1;  
     time(&t1);
 
-
     low_f = atoi(argv[2]); high_f = atoi(argv[3]);
     
     ss = socket(PF_INET, SOCK_STREAM, 0);//UDPならSOCK_DGRAM
@@ -59,14 +58,13 @@ int main(int argc, char *argv[]){
     serv_addr.sin_addr.s_addr = INADDR_ANY; /*どのIPアドレスでも待ち受けしたいです*/
     bind(ss, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
     int l = listen(ss, 10);
-
     
     socklen_t len = sizeof(struct sockaddr_in);
-    // printf("t1\n");
+   
     s = accept(ss, (struct sockaddr *)&client_addr, &len);
     if(s == -1){perror("accept"); exit(1);}
-    //printf("t2\n");
-    
+
+   
     unsigned char data2[N];
 
     time_t t2;
@@ -81,52 +79,21 @@ int main(int argc, char *argv[]){
       bytes -= N;
     }
   }
-  else if(argc == 5){
-    low_f = atoi(argv[3]); high_f = atoi(argv[4]);
-    s = socket(PF_INET, SOCK_STREAM, 0);//UDPならSOCK_DGRAM
-    if(s == -1){perror("socket"); exit(1);}
 
-    char *ip = argv[1];
-    char *port = argv[2];
-
-    client_addr.sin_family = AF_INET; /* これは IPv4 のアドレスです */
-    //client_addr.sin_addr.s_addr = inet_addr(ip); /* IP アドレスは ... です */
-    int inet = inet_aton(ip, &client_addr.sin_addr);//上の強いバージョン
-    if(inet == 0){perror("inet_aton"); exit(1);}
-    client_addr.sin_port = htons(atoi(port)); /* ポートは ... です */
-    int ret = connect(s, (struct sockaddr *)&client_addr, sizeof(client_addr)); /* 遂に connect */
-    if(ret == -1){perror("connect"); exit(1);}
-  }
+  socklen_t client_addr_len;
 
   while(1){
-    //フーリエ変換始まり
+    client_addr_len = sizeof(client_addr);
+    int n_recv = recvfrom(s, buf, n*sizeof(sample_t), 0, (struct sockaddr *)&client_addr, &client_addr_len);//recvfromとかもあるよ
+    if(n_recv == -1){perror("n_recv"); exit(1);};
+    if(n_recv == 0) break;
+
     ssize_t n_read = read_n(0, n * sizeof(sample_t), buf);
     if (n_read == 0) break;
-    sample_to_complex(buf, X, n);
-    fft(X, Y, n);
-    complex double * Z = calloc(sizeof(complex double), n);
-    memcpy(Z, Y, n*sizeof(complex double));
-    for(b = 0; b < n; b++){
-      if(b > low_f/((double)44100/n) && b < high_f/((double)44100/n)){
-	Y[b+60] = Z[b];
-	Y[b] = 0 + 1.0j * 0;
-      }
-    }
-    ifft(Y, X, n);
-    complex_to_sample(X, buf, n);
-    //フーリエ変換終わり
-
+   
     int n_send = send(s, buf, n_read, 0);//s
     if(n_send == -1) {perror("n_send"); exit(1);}
     if(n_send == 0) break;
-
-    int n_recv = recv(s, buf, n*sizeof(sample_t), 0);//recvfromとかもあるよ
-    if(n_recv == -1){perror("n_recv"); exit(1);};
-    if(n_recv == 0) break;
-    
-    int n_write = write(1, buf, n_recv);//sendtoとかもあるよ
-    if(n_write == -1){perror("n_send"); exit(1);}
-    if(n_write == 0) break;
   }
 
   if(argc == 4) shutdown(ss, SHUT_WR);

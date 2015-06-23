@@ -104,11 +104,8 @@ int main(int argc, char *argv[]){
     if (n_read == 0) break;
     sample_to_complex(buf, X, n);
     fft(X, Y, n);
-    complex double * Z = calloc(sizeof(complex double), n);
-    memcpy(Z, Y, n*sizeof(complex double));
     for(b = 0; b < n; b++){
-      if(b > low_f/((double)44100/n) && b < high_f/((double)44100/n)){
-	Y[b+60] = Z[b];
+      if(b < low_f/((double)44100/n) || b > high_f/((double)44100/n)){
 	Y[b] = 0 + 1.0j * 0;
       }
     }
