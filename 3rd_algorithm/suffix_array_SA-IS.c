@@ -72,6 +72,7 @@ void induced_sort(long longest, char *bucket[longest+1], char *origin, long *num
 
 int main(int argc, char *argv[]){
   char *origin = malloc(sizeof(char)*(LONGEST+1));//'\0'を入れる空間も作る '\0'があるとlast_numがつくりやすい
+  
   long appear_num[10] = {};//0~9の文字の先頭の出現回数
   long num_last[10];//各バケツの最後ただし'\0'は除く
   long num_begin[10];//各バケツの最初ただし'\0'は除く
@@ -79,11 +80,13 @@ int main(int argc, char *argv[]){
   long num_of_L[10] = {};
   long i = 0;
   
+  
+  
   char *filename = argv[1];
 
   FILE *fp;
   if((fp = fopen(filename, "r")) == NULL) {perror("fopen"); exit(1);}
-  while((origin[i] = fgetc(fp)) != EOF){
+  while((origin[i] = fgetc(fp)) != EOF){//unsigned char でこのままやるとループを抜けられなくなる。なぜならEOFはint型だから。回答はsuffix_array_SA-IS_kisei.c
     if(origin[i] == ' ' || origin[i] == '\n'){}
     else{
       //data[i] = origin + i;//suffix作成完了

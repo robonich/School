@@ -19,23 +19,34 @@
 #endif
 
 unsigned char mask[]={0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};//unsigned char は1ビットつまり8バイトのメモリをもつ。そのときこの様に書いてやることで
-#define tget(i) ( (t[(i)/8]&mask[(i)%8]) ? 1 : 0 )
+/*#define tget(i) ( (t[(i)/8]&mask[(i)%8]) ? 1 : 0 )
 #define tset(i, b) (t[(i)/8]=(b)?(mask[(i)%8]|t[(i)/8]):((~mask[(i)%8])&t[(i)/8]))
 //~mask[i]の論理積をとっているということは、iバイト目だけゼロにするという意味。
 #define chr(i) (cs==sizeof(int)?((int*)s)[i]:((unsigned char *)s)[i])
 #define isLMS(i) (i>0 && tget(i) && !tget(i-1))
+*/
+bool tget(int i, unsigned char *t){
+  return t[i/8]&mask[i%8] ? 1 : 0;
+}
 
+void tset(int i, bool b, unsigned char *t){
+  t[i/8] = (b) ? (mask[i%8]|t[i/8]):((~mask[i%8])&t[i/8]);
+}
+
+bool isLMS(int i, unsigned char *t){
+  return i > 0 && tget(i, t) && !tget(i-1, t);
+}
 
 typedef struct answer{
   int strlength;
   int forward_num;
 }Answer;
 
-void getBuckets(unsigned char *s, int *bkt, int n, int K, int cs, bool end);
-void induceSAl(unsigned char *t, int *SA, unsigned char *s, int *bkt, int n, int K, int cs, bool end);
-void induceSAl(unsigned char *t, int *SA, unsigned char *s, int *bkt, int n, int K, int cs, bool end);
-void induceSAs(unsigned char *t, int *SA, unsigned char *s, int *bkt, int n, int K, int cs, bool end);
-void SA_IS(unsigned char *s, int *SA, int n, int K, int cs);
+void getBuckets(unsigned char *s, int *bkt, int n, int K, bool end);
+void induceSAl(unsigned char *t, int *SA, unsigned char *s, int *bkt, int n, int K, bool end);
+void induceSAl(unsigned char *t, int *SA, unsigned char *s, int *bkt, int n, int K, bool end);
+void induceSAs(unsigned char *t, int *SA, unsigned char *s, int *bkt, int n, int K, bool end);
+void SA_IS(unsigned char *s, int *SA, int n, int K);
 
 
 int main(int argc, char *argv[]){
@@ -63,7 +74,14 @@ int main(int argc, char *argv[]){
 
   int *SA = malloc(sizeof(int)*longest+1);
 
-  SA_IS(origin, SA, longest, 9, sizeof(unsigned char));
+  SA_IS(origin, SA, longest+1, 5);//0~9だからK=10
+
+  printf("\nSA=");
+  for(i = 0; i < longest; i++) printf("%d", SA[i]);
+  printf("\n");
+  printf("suffix\n");
+  for(i = 0; i < longest; i++) printf("%s\n", origin+SA[i]);
+  printf("\n");
 
   int j;
   
@@ -97,13 +115,13 @@ int main(int argc, char *argv[]){
 //Kは文字の種類かな
 //csはint型なのかchar型なのかを選ぶものだからcs = 1で設定？
 //end = 1ならそのバケットの最後の位置を、end = 0ならそのバケットの最初の位置をbktに保存する。
-void getBuckets(unsigned char *s, int *bkt, int n, int K, int cs, bool end){
+void getBuckets(unsigned char *s, int *bkt, int n, int K, bool end){
   printf("getbuckets in");
   int i, sum=0;
   // clear all buckets
-  for(i=0; i<=K; i++) bkt[i]=0;
+  for(i=0; i<=K; i++) bkt[i]=0;//0~9までの10このバケットと\0の１個のバケット合わせて11このバケット(K=9)
   // compute the size of each bucket
-  for(i=0; i<n; i++) bkt[chr(i)]++;
+  for(i=0; i<n; i++) bkt[(int)*(s+i)-(int)'0']++;//数字と対応させているバケットなのでこのように記述する
   for(i=0; i<=K; i++){
     sum+=bkt[i];
     bkt[i]=end ? sum : sum-bkt[i];
@@ -112,27 +130,27 @@ void getBuckets(unsigned char *s, int *bkt, int n, int K, int cs, bool end){
 }
 
 // compute SAl
-void induceSAl(unsigned char *t, int *SA, unsigned char *s, int *bkt, int n, int K, int cs, bool end){
+void induceSAl(unsigned char *t, int *SA, unsigned char *s, int *bkt, int n, int K, bool end){
   printf("induceSAl in");
   int i, j;
   // find starts of buckets
-  getBuckets(s, bkt, n, K, cs, end);
-  for(i=0; i<n; i++){
+  getBuckets(s, bkt, n, K, end);
+  for(i=0; i<n; i++){//前から見ていく
     j=SA[i]-1;
-    if(j>=0 && !tget(j)) SA[bkt[chr(j)]++]=j;
+    if(j>=0 && !tget(j, t)) SA[bkt[(int)*(s+j)-(int)'0']++]=j;//tget=1となるのがS, tget=0となるのがLだから!tget==1はLだったらという意味
   }
   printf("induceSAl out");
 }
 
 // compute SAs
-void induceSAs(unsigned char *t, int *SA, unsigned char *s, int *bkt, int n, int K, int cs, bool end){
+void induceSAs(unsigned char *t, int *SA, unsigned char *s, int *bkt, int n, int K, bool end){
   printf("induceSAs in");
   int i, j;
   // find ends of buckets
-  getBuckets(s, bkt, n, K, cs, end);
-  for(i=n-1; i>=0; i--){
+  getBuckets(s, bkt, n, K, end);
+  for(i=n-1; i>=0; i--){//後ろから見ていく
     j=SA[i]-1;
-    if(j>=0 && tget(j)) SA[--bkt[chr(j)]]=j;
+    if(j>=0 && tget(j, t)) SA[--bkt[(int)*(s+j)-(int)'0']]=j;//Sだったら
   }
   printf("induceSAs out");
 }
@@ -141,35 +159,36 @@ void induceSAs(unsigned char *t, int *SA, unsigned char *s, int *bkt, int n, int
 // require s[n-1]=0 (the sentinel!), n>=2
 // use a working space (excluding s and SA) of
 // at most 2.25n+O(1) for a constant alphabet
-void SA_IS(unsigned char *s, int *SA, int n, int K, int cs){
+
+void SA_IS(unsigned char *s, int *SA, int n, int K){
   // LS-type array in bits
   printf("SA_IS in");
-  unsigned char *t = malloc(sizeof(char)*(n/8+1));
-  int i, j;
+  unsigned char *t = malloc(sizeof(unsigned char)*(n/8+1));
   // classify the type of each character
-  // the sentinel must be in s1, important!!!
-  tset(n-2, 0);
-  tset(n-1, 1);
-  for(i=n-3; i>=0; i--) tset(i, (chr(i)<chr(i+1) || (chr(i)==chr(i+1) && tget(i+1)==1))?1:0); 
-  
+  // the sentinel must be in s1, important!!!　sentinel is \0 n-1が\0ということはnは\0を含んだ数？
+  //tset(int i, bool b, unsigned char *t)
+  tset(n-2, 0, t);//bが0なら？tsetはsかlかを決めるもののはず
+  tset(n-1, 1, t);//bが1なら？
+  for(i=n-3; i>=0; i--) tset(i, (int)*(s+i)<(int)*(s+i+1) || (int)*(s+i)<(int)*(s+i+1) && tget(i+1, t)==1 ? 1 : 0, t);
+
   // stage 1: reduce the problem by at least 1/2
   // sort all the S-substrings
   // bucket array
-  int *bkt = (int *)malloc(sizeof(int)*(K+1));
+  int *bkt = (int *)malloc(sizeof(int)*(K+1));//K+1つまり\0の場所も作るということ
   // find ends of buckets
-  getBuckets(s, bkt, n, K, cs, true);
+  getBuckets(s, bkt, n, K, true);//trueなら末尾を探す
   for(i=0; i<n; i++) SA[i]=-1;
-  for(i=1; i<n; i++) if(isLMS(i)) SA[--bkt[chr(i)]]=i;
-  
-  induceSAl(t, SA, s, bkt, n, K, cs, false);
-  induceSAs(t, SA, s, bkt, n, K, cs, true);
+  for(i=1; i<n; i++) if(isLMS(i, t)) SA[--bkt[(int)*(s+i)-(int)'0']]=i;
+					
+  induceSAl(t, SA, s, bkt, n, K, false);//前から探す
+  induceSAs(t, SA, s, bkt, n, K, true);//後ろから探す
   free(bkt);
   
   // compact all the sorted substrings into
   // the first n1 items of SA
   // 2*n1 must be not larger than n (proveable)
   int n1=0;
-  for(i=0; i<n; i++) if(isLMS(SA[i])) SA[n1++]=SA[i];
+  for(i=0; i<n; i++) if(isLMS(SA[i], t)) SA[n1++]=SA[i];
   
   // find the lexicographic names of substrings
   // init the name array buffer
@@ -179,11 +198,11 @@ void SA_IS(unsigned char *s, int *SA, int n, int K, int cs){
     int pos=SA[i]; bool diff=false;
     int d;
     for(d=0; d<n; d++)
-      if(prev==-1 || chr(pos+d)!=chr(prev+d) || tget(pos+d)!=tget(prev+d)){
+      if(prev==-1 || (int)*(s+pos+d)!=(int)*(s+prev+d) || tget(pos+d, t)!=tget(prev+d, t)){
 	diff=true;
 	break;
       }
-      else if(d>0 && (isLMS(pos+d) || isLMS(prev+d))) break;
+      else if(d>0 && (isLMS(pos+d, t) || isLMS(prev+d, t))) break;
     
     if(diff){
       name++;
@@ -196,7 +215,7 @@ void SA_IS(unsigned char *s, int *SA, int n, int K, int cs){
   // stage 2: solve the reduced problem
   // recurse if names are not yet unique
   int *SA1=SA, *s1=SA+n-n1;
-  if(name<n1) SA_IS((unsigned char*)s1, SA1, n1, name-1, sizeof(int));
+  if(name<n1) SA_IS((unsigned char*)s1, SA1, n1, name-1);
   else// generate the suffix array of s1 directly
     for(i=0; i<n1; i++) SA1[s1[i]] = i;
   
@@ -206,21 +225,21 @@ void SA_IS(unsigned char *s, int *SA, int n, int K, int cs){
   bkt = (int *)malloc(sizeof(int)*(K+1));
   // put all the LMS characters into their buckets
   // find ends of buckets
-  getBuckets(s, bkt, n, K, cs, true);
+  getBuckets(s, bkt, n, K, true);
   for(i=1, j=0; i<n; i++)
-    if(isLMS(i)) s1[j++]=i; // get p1
+    if(isLMS(i, t)) s1[j++]=i; // get p1
   // get index in s
   for(i=0; i<n1; i++) SA1[i]=s1[SA1[i]];
   // init SA[n1..n-1]
   for(i=n1; i<n; i++) SA[i]=-1;
   for(i=n1-1; i>=0; i--){
     j=SA[i]; SA[i]=-1;
-    SA[--bkt[chr(j)]]=j;
+    SA[--bkt[(int)*(s+j)-(int)'0']]=j;
   }
-  induceSAl(t, SA, s, bkt, n, K, cs, false);
-  induceSAs(t, SA, s, bkt, n, K, cs, true);
+  induceSAl(t, SA, s, bkt, n, K, false);
+  induceSAs(t, SA, s, bkt, n, K, true);
   free(bkt);
-  //free(t);
+  free(t);
   printf("SA_IS out");  
 }
 

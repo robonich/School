@@ -25,6 +25,22 @@ unsigned char mask[]={0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};//unsigned
 #define chr(i) (cs==sizeof(int)?((int*)s)[i]:((unsigned char *)s)[i])
 #define isLMS(i) (i>0 && tget(i) && !tget(i-1))
 
+bool tget(int i, unsigned char *t){
+  return t[i/8]&mask[i%8] ? 1 : 0;
+}
+
+void tset(int i, bool b, unsigned char *t){
+  t[i/8] = (b) ? (mask[i%8]|t[i/8]):((~mask[i%8])&t[i/8]);
+  return 0;
+}
+
+unsigned char chr(int i, int cs, unsigned char *s){
+  return cs == sizeof(int) ? ((int *)s)[i] : (unsigned char *)s)[i];
+}
+
+bool isLMS(int i){
+  return i > 0 && tget(i, t) && !tget(i-1, t);
+}
 
 typedef struct answer{
   int strlength;
@@ -103,7 +119,7 @@ void getBuckets(unsigned char *s, int *bkt, int n, int K, int cs, bool end){
   // clear all buckets
   for(i=0; i<=K; i++) bkt[i]=0;
   // compute the size of each bucket
-  for(i=0; i<n; i++) bkt[chr(i)]++;
+  for(i=0; i<n; i++) bkt[(int)*(s+n)-'0']++;//数字と対応させているバケットなのでこのように記述する
   for(i=0; i<=K; i++){
     sum+=bkt[i];
     bkt[i]=end ? sum : sum-bkt[i];
