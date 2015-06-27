@@ -1,1 +1,0 @@
-nichyou@nichyou-Lenovo-IdeaPad-Yoga-13.2188:1434986158

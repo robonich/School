@@ -21,7 +21,7 @@
 unsigned char mask[]={0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};//unsigned char は1ビットつまり8バイトのメモリをもつ。そのときこの様に書いてやることで
 /*#define tget(i) ( (t[(i)/8]&mask[(i)%8]) ? 1 : 0 )
 #define tset(i, b) (t[(i)/8]=(b)?(mask[(i)%8]|t[(i)/8]):((~mask[(i)%8])&t[(i)/8]))
-//~mask[i]の論理積をとっているということは、iバイト目だけゼロにするという意味。
+//~mask[i]の論理積をとっているということは、iバイト目だけゼロにするという意味。つまり1ならsで0ならl
 #define chr(i) (cs==sizeof(int)?((int*)s)[i]:((unsigned char *)s)[i])
 #define isLMS(i) (i>0 && tget(i) && !tget(i-1))
 */

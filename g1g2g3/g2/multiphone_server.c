@@ -29,7 +29,6 @@ void ifft(complex double *, complex double *, long);
 int pow2check(long);
 
 
-
 int main(int argc, char *argv[]){
 
   long n = 1024;//2のn乗であればよい
